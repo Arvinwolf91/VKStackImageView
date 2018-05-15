@@ -9,23 +9,19 @@
 import UIKit
 
 class ViewController: UIViewController {
-
-    var vkView : VKStackImageView?
     
+    var vkView : VKStackImageView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       
         
         vkView = VKStackImageView(imageNamesArray: ["dhoni.jpg","yuvi.jpg","shikhar.jpg","kohli.jpg"])
         view.addSubview(vkView!)
     }
-
     
     @IBAction func buttonTapped(_ sender: Any) {
         vkView?.toggleGallery()
     }
     
-
 }
 

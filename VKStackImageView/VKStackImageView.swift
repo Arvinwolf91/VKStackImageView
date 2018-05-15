@@ -12,19 +12,18 @@ import UIKit
 
 class VKStackImageView: UIView {
     
-    
     var isGalleryOpen = false
     var images = [StackCardImage]()
     
     init(imageNamesArray : [String]) {
         let frame:CGRect = CGRect(x: 0, y: 20, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height-64)
         super.init(frame: frame)
-
+        
         for i in 0..<imageNamesArray.count{
             let dm = StackCardImage(imageNamed: imageNamesArray[i])
             images.append(dm)
         }
-
+        
         for image in images {
             image.layer.anchorPoint.y = 0.0
             image.frame = bounds
@@ -34,11 +33,9 @@ class VKStackImageView: UIView {
         }
         var perspective = CATransform3DIdentity
         perspective.m34 = -1.0/250.0
-
+        
         self.layer.sublayerTransform = perspective
-
     }
-    
     
     func selectImage(selectedImage: StackCardImage) {
         
@@ -64,8 +61,8 @@ class VKStackImageView: UIView {
         
         isGalleryOpen = false
     }
-
-     func toggleGallery() {
+    
+    func toggleGallery() {
         
         if isGalleryOpen {
             for subview in self.subviews {
@@ -80,7 +77,6 @@ class VKStackImageView: UIView {
                 
                 image.layer.add(animation, forKey: nil)
                 image.layer.transform = CATransform3DIdentity
-                
             }
             
             isGalleryOpen = false
@@ -118,8 +114,6 @@ class VKStackImageView: UIView {
 }
 
 
-
-
 class StackCardImage: UIImageView {
     
     var didSelect: ((StackCardImage)->())?
@@ -130,7 +124,7 @@ class StackCardImage: UIImageView {
         image = UIImage(named: imageNamed)
         contentMode = .scaleAspectFill
         clipsToBounds = true
-       
+        
         autoresizingMask = [.flexibleHeight, .flexibleWidth]
         
         layer.shouldRasterize = true
