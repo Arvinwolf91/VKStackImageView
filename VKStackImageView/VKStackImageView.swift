@@ -16,7 +16,8 @@ class VKStackImageView: UIView {
     var images = [StackCardImage]()
     
     init(imageNamesArray : [String]) {
-        let frame:CGRect = CGRect(x: 0, y: 20, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height-64)
+        
+        let frame = CGRect(x: 0, y: 20, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height-64)
         super.init(frame: frame)
         
         for i in 0..<imageNamesArray.count{
@@ -40,9 +41,8 @@ class VKStackImageView: UIView {
     func selectImage(selectedImage: StackCardImage) {
         
         for subview in self.subviews {
-            guard let image = subview as? StackCardImage else {
-                continue
-            }
+            guard let image = subview as? StackCardImage else { continue }
+            
             if image === selectedImage {
                 UIView.animate(withDuration: 0.33, delay: 0.0, options: .curveEaseIn, animations: {
                     image.layer.transform = CATransform3DIdentity
@@ -65,10 +65,10 @@ class VKStackImageView: UIView {
     func toggleGallery() {
         
         if isGalleryOpen {
+            
             for subview in self.subviews {
-                guard let image = subview as? StackCardImage else {
-                    continue
-                }
+                
+                guard let image = subview as? StackCardImage else { continue }
                 
                 let animation = CABasicAnimation(keyPath: "transform")
                 animation.fromValue = NSValue(caTransform3D: image.layer.transform)
@@ -81,31 +81,32 @@ class VKStackImageView: UIView {
             
             isGalleryOpen = false
             return
-        }
-        
-        var imageYOffset: CGFloat = 25.0
-        
-        for subview in self.subviews {
             
-            guard let image = subview as? StackCardImage else {
-                continue
+        } else {
+            
+            var imageYOffset: CGFloat = 25.0
+            
+            for subview in self.subviews {
+                
+                guard let image = subview as? StackCardImage else { continue }
+                
+                var imageTransform = CATransform3DIdentity
+                imageTransform = CATransform3DTranslate(imageTransform, 0.0, imageYOffset, 0.0)
+                imageTransform = CATransform3DScale(imageTransform, 0.95, 0.7, 1.0)
+                imageTransform = CATransform3DRotate(imageTransform, .pi/8, -1.0, 0.0, 0.0)
+                
+                let animation = CABasicAnimation(keyPath: "transform")
+                animation.fromValue = NSValue(caTransform3D: image.layer.transform)
+                animation.toValue = NSValue(caTransform3D: imageTransform)
+                animation.duration = 0.33
+                
+                image.layer.add(animation, forKey: nil)
+                image.layer.transform = imageTransform
+                imageYOffset += self.frame.height / CGFloat(images.count)
             }
             
-            var imageTransform = CATransform3DIdentity
-            imageTransform = CATransform3DTranslate(imageTransform, 0.0, imageYOffset, 0.0)
-            imageTransform = CATransform3DScale(imageTransform, 0.95, 0.7, 1.0)
-            imageTransform = CATransform3DRotate(imageTransform, .pi/8, -1.0, 0.0, 0.0)
-            
-            let animation = CABasicAnimation(keyPath: "transform")
-            animation.fromValue = NSValue(caTransform3D: image.layer.transform)
-            animation.toValue = NSValue(caTransform3D: imageTransform)
-            animation.duration = 0.33
-            image.layer.add(animation, forKey: nil)
-            
-            image.layer.transform = imageTransform
-            imageYOffset += self.frame.height / CGFloat(images.count)
+            isGalleryOpen = true
         }
-        isGalleryOpen = true
     }
     
     required init?(coder aDecoder: NSCoder) {
